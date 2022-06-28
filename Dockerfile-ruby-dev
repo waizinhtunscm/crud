@@ -45,7 +45,7 @@ WORKDIR /tmp
 
 COPY Gemfile /tmp/Gemfile
 COPY Gemfile.lock /tmp/Gemfile.lock
-COPY bin /tmp/bin
+# COPY bin /tmp/bin
 
 
 RUN bundler install

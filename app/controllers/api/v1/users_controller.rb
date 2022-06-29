@@ -1,5 +1,5 @@
 class Api::V1::UsersController < ApplicationController
-  skip_before_action :verify_authenticity_token
+  # skip_before_action :verify_authenticity_token
     # GET /users
     def index
         @users = User.all
@@ -7,8 +7,12 @@ class Api::V1::UsersController < ApplicationController
     end
     # GET /users/:id
     def show
-      @user = User.find(params[:id])
-      render json: @user
+      begin
+        @user = User.find(params[:id])
+        render json: @user
+      rescue ActiveRecord::RecordNotFound
+        render json: {message: 'User not exit.'}, status: 400
+      end
     end
     
     # POST /users
@@ -31,20 +35,15 @@ class Api::V1::UsersController < ApplicationController
       end
     end
     # DELETE users/:id
-    def destory
+    def destroy
       @user = User.find(params[:id])
       if @user
-        @user.destory
+        @user.destroy
         render json: {message: 'User successfully deleted.'}, status: 200
       else
         render json: {error: 'Unable to delete user.'}, status: 400
       end
     end
-
-    def healthcheck
-      render plain: "ok par naw pyan run tar par"
-    end
-    
     private
     def user_params
       params.require(:user).permit(:username,:password)

@@ -6,7 +6,7 @@
           <b-icon-people-fill class="h2"></b-icon-people-fill>
         </b-col>
         <b-col>
-          <span class="h3">CRM</span>
+          <span class="h3">User</span>
         </b-col>
       </b-row>
     </b-container>

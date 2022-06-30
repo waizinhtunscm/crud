@@ -43,12 +43,24 @@
             class="text-center"
           >
             <template #cell(name)="data">
-              {{
-                `${data.item.first_name} ${data.item.last_name}`
-              }}
+              <div class="d-flex flex-row td-text">
+                <div v-if="data.item.first_name">
+                  {{ `${data.item.first_name}` }}
+                </div>
+                <div v-if="data.item.last_name">
+                  {{ ` ${data.item.last_name}` }}
+                </div>
+              </div>
+            </template>
+            <template #cell(email)="data">
+              <div class="d-flex flex-row td-text">
+                <div v-if="data.item.email">
+                  {{ `${data.item.email}` }}
+                </div>
+              </div>
             </template>
             <template #cell(dob)="data">
-              <div v-if="data.item.dob">${data.item.last_name}</div>
+              <div v-if="data.item.dob">{{ `${data.item.dob}` }}</div>
               <div v-else>-</div>
             </template>
             <template #cell(status)="data">
@@ -63,7 +75,7 @@
             </template>
             <template #cell(actions)="data">
               <b-row>
-                <b-col cols="7">
+                <b-col cols="6">
                   <b-icon-pencil-square
                     class="action-item"
                     variant="primary"
@@ -85,12 +97,7 @@
     </b-row>
 
     <!-- Modal for adding new users -->
-    <b-modal
-      ref="create-user-modal"
-      size="xl"
-      hide-footer
-      title="New User"
-    >
+    <b-modal ref="create-user-modal" size="xl" hide-footer title="New User">
       <create-user-form
         @closeCreateModal="closeCreateModal"
         @reloadDataTable="getUserData"
@@ -99,12 +106,7 @@
     </b-modal>
 
     <!-- Modal for updating users -->
-    <b-modal
-      ref="edit-user-modal"
-      size="xl"
-      hide-footer
-      title="Edit User"
-    >
+    <b-modal ref="edit-user-modal" size="xl" hide-footer title="Edit User">
       <edit-user-form
         @closeEditModal="closeEditModal"
         @reloadDataTable="getUserData"
@@ -149,21 +151,23 @@ export default {
       // Note 'isActive' is left out and will not appear in the rendered table
 
       fields: [
-       
         {
           key: "name",
           label: "Name",
           sortable: false,
+          thStyle: { width: "20%" },
+          thClass: "td-text",
         },
         {
           key: "email",
           label: "E-Mail",
           sortable: false,
+          thClass: "td-text",
         },
         {
-          key: "dob", 
+          key: "dob",
           label: "Date of Birth",
-          sortable:false,
+          sortable: false,
         },
         {
           key: "status",
@@ -203,7 +207,7 @@ export default {
           this.activeUsersData = response.data.filter(
             (item) => item.status === "active"
           );
-          this.activeUsers = this.activeUsersData.length; 
+          this.activeUsers = this.activeUsersData.length;
         })
         .catch((error) => {
           console.log(error);
@@ -222,7 +226,7 @@ export default {
     },
     setFilterActiveIsActive() {
       this.tableHeader = "Active Users";
-      this.items = this.activeUsersData; 
+      this.items = this.activeUsersData;
     },
     showAlertCreate() {
       this.showSuccessAlert = true;
@@ -250,5 +254,8 @@ export default {
 <style>
 .action-item:hover {
   cursor: pointer;
+}
+.td-text {
+  text-align: left;
 }
 </style>

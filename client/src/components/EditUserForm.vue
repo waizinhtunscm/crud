@@ -1,16 +1,13 @@
 <template>
   <b-form class="mt-3">
     <b-row>
-      <b-row>
-        <h4 class="text-secondary">Contact Details</h4>
-      </b-row>
       <b-col cols="6">
         <b-form-group id="first-name" label="First Name" label-for="first-name">
           <b-form-input
             id="first-name"
             type="text"
             placeholder="First Name"
-            v-model="customer.contact_firstname"
+            v-model="user.first_name"
           ></b-form-input>
         </b-form-group>
       </b-col>
@@ -20,7 +17,7 @@
             id="last-name"
             type="text"
             placeholder="Last Name"
-            v-model="customer.contact_lastname"
+            v-model="user.last_name"
           ></b-form-input>
         </b-form-group>
       </b-col>
@@ -32,65 +29,58 @@
             id="email"
             type="email"
             placeholder="example@crm.com"
-            v-model="customer.contact_email"
+            v-model="user.email"
           ></b-form-input>
         </b-form-group>
       </b-col>
     </b-row>
-    <b-row class="mt-5">
-      <h4 class="text-secondary">Company Details</h4>
-    </b-row>
     <b-row>
-      <b-col cols="4">
-        <b-form-group
-          id="company_name"
-          label="Company Name"
-          label-for="company_name"
-        >
+      <b-col cols="6">
+        <b-form-group id="password" label="Password" label-for="password">
           <b-form-input
-            id="company_name"
+            id="password"
             type="text"
-            placeholder="XYZ Industries"
-            v-model="customer.company_name"
+            v-model="user.password"
           ></b-form-input>
         </b-form-group>
       </b-col>
     </b-row>
     <b-row>
-      <b-col cols="4">
-        <b-form-group
-          id="acquired_on"
-          label="Acquired On"
-          label-for="acquired_on"
-        >
-          <b-form-input
-            id="acquired_on"
-            type="date"
-            v-model="customer.acquired_on"
-          ></b-form-input>
+      <b-col cols="6">
+        <b-form-group id="dob" label="Date of Birth" label-for="dob">
+          <b-form-input id="dob" type="date" v-model="user.dob"></b-form-input>
+        </b-form-group>
+      </b-col>
+    </b-row>
+    <b-row class="mt-3">
+      <b-col cols="6">
+        <b-form-group id="address" label="Address" label-for="address">
+          <b-form-textarea
+            id="address"
+            type="address"
+            v-model="user.address"
+          ></b-form-textarea>
         </b-form-group>
       </b-col>
     </b-row>
     <b-row class="mt-2">
       <b-form-checkbox
-        id="customer_status"
-        v-model="customer.customer_status"
-        name="customer-status"
+        id="status"
+        v-model="user.status"
+        name="status"
         value="active"
         unchecked-value="inactive"
       >
-        Customer is active
+        User is active
       </b-form-checkbox>
     </b-row>
     <b-row class="mt-4">
       <b-col cols="3">
-        <b-button variant="primary" class="px-5" @click="updateCustomer"
-          >Update Customer</b-button
+        <b-button variant="primary" class="px-5" @click="updateUser"
+          >Update User</b-button
         >
       </b-col>
-      <b-col>
-        <b-button variant="warning" @click="triggerClose">Close</b-button>
-      </b-col>
+      
     </b-row>
   </b-form>
 </template>
@@ -99,38 +89,35 @@
 import axios from "axios";
 
 export default {
-  name: "CreateCustomerModal",
+  name: "CreateUserModal",
   props: {
-    customerId: Number,
+    userId: Number,
   },
   data() {
     return {
-      customer: {},
+      user: {},
     };
   },
   mounted() {
-    this.getCusomterByID();
+    this.getUserByID();
   },
   methods: {
     triggerClose() {
       this.$emit("closeEditModal");
     },
-    getCusomterByID() {
+    getUserByID() {
       axios
-        .get(`http://localhost:3000/customers/${this.customerId}`)
+        .get(`http://localhost:3000/api/v1/users/${this.userId}`)
         .then((response) => {
-          this.customer = response.data;
+          this.user = response.data;
         })
         .catch((error) => {
           console.log(error);
         });
     },
-    updateCustomer() {
+    updateUser() {
       axios
-        .put(
-          `http://localhost:3000/customers/${this.customerId}`,
-          this.customer
-        )
+        .put(`http://localhost:3000/api/v1/users/${this.userId}`, this.user)
         .then((response) => {
           console.log(response.data);
           this.$emit("closeEditModal");

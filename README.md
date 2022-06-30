@@ -11,7 +11,7 @@ $ git config --global core.autocrlf false
 ```
 ## clone project
 ```bash
-$ git clone https://github.com/waizinhtunscm/rails_template.git
+$ git clone https://github.com/waizinhtunscm/crud.git
 ```
 ## development preparation
 
@@ -27,6 +27,8 @@ $ docker-compose run --rm app bash
 
 # Node module installation
 $ bin/yarn install
+
+$ rails db:migrate
 
 # stop app bash
 $ exit
